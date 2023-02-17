@@ -1,3 +1,5 @@
 .env
 __pycache__
 key.ini
+.vscode
+conn_db.py

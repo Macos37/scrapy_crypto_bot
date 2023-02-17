@@ -2,8 +2,9 @@ import websockets
 import asyncio
 import json
 
-async def track_price_change(symbol,percentage=0.001):
-    url = f"wss://stream.binance.com:9443/ws/{symbol.lower()}@ticker"
+
+async def track_price_change(symbol):
+    url = f"wss://stream.binance.com: 9443/ws/{symbol.lower()}@ticker"
     async with websockets.connect(url) as websocket:
         while True:
             message = json.loads(await websocket.recv())
@@ -12,11 +13,11 @@ async def track_price_change(symbol,percentage=0.001):
                 change = (new_price-price)/price *100
                 print(f"{symbol}: {price} -> {new_price} ({change:.2f}%)")
             price = new_price
-            
-async def monitor(tokens,percentage=0.001):
-    tasks = [asyncio.create_task(track_price_change(token,percentage)) for token in tokens]
+            await asyncio.sleep(60)
+                    
+                    
+async def monitor(tokens, percentage=1):
+    tasks = [asyncio.create_task(track_price_change(token, percentage)) for token in tokens]
     await asyncio.gather(*tasks)
-    
-
-t = ["BTCUSDT", "ETHUSDT", "XRPUSDT", "LINKUSDT", "BCHUSDT"]
-asyncio.run(monitor(t))
+coins = ["BTCUSDT", "ETHUSDT", "XRPUSDT", "LINKUSDT", "BCHUSDT"]
+asyncio.run(monitor(coins))
